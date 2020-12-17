@@ -5,10 +5,11 @@
 <mapper namespace="org.zerock.mapper.BoardMapper">
 	<select id="getList" resultType="org.zerock.domain.BoardVO">
 	<![CDATA[
-	select * from tbl_board where bno >0
+    	select * from tbl_board order by bno desc
 	]]>
 	</select>
-	
+<!-- 	select * from tbl_board where bno > 0
+ -->	
 	<insert id="insert">
 	insert into tbl_board(bno,title,content,writer)
 	values (seq_board.nextval,#{title}, #{content}, #{writer})

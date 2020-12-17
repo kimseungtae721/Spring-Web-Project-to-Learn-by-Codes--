@@ -1,6 +1,7 @@
 package org.zerock.controller;
 
-import org.aspectj.lang.annotation.Before;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class BoardControllerTests {
 	
 	private MockMvc mockMvc;
 	
-	@Before(value = "")
+	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
@@ -40,3 +41,4 @@ public class BoardControllerTests {
 			.getModelMap());
 	}
 }
+
