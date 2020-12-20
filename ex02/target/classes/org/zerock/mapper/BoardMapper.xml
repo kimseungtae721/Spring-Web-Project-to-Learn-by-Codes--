@@ -27,9 +27,9 @@
 	select * from tbl_board where bno = #{bno}
 	</select>
 	
-	<select id="delete">
+	<delete id="delete">
 	delete from tbl_board where bno = #{bno}
-	</select>
+	</delete>
 	
 	<update id="update">
 	update tbl_board
@@ -39,4 +39,5 @@
 	updateDate = sysdate
 	where bno = #{bno}
 	</update>
+	
 </mapper>

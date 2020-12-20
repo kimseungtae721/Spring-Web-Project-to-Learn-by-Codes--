@@ -23,43 +23,47 @@ public class BoardController {
 	
 	@GetMapping("/list")
 	public void list(Model model) {
-		log.info("list");
+		log.info("컨트롤러 list");
 		model.addAttribute("list", service.getList());
 	}
 	
 	@GetMapping({"/get","/modify"})
-	public void get(@RequestParam("bno")Long bno, Model model) {
+	public void get(@RequestParam("bno") Long bno, Model model) {
+		
+		log.info("/get or modify");
 		
 		model.addAttribute("board", service.get(bno));
 	}
+	@PostMapping("/modify")
+	public String modify(BoardVO board,RedirectAttributes rttr) {
+		log.info("modify:" + board);
+		
+		if(service.modify(board)) {
+			rttr.addFlashAttribute("result", "success");
+		}
+		return "redirect:/board/list";
+	}
+	
+	@PostMapping("/remove")
+	public String remove(@RequestParam("bno") Long bno,RedirectAttributes rttr) {
+		log.info("컨트롤러 remove:" + bno);
+		if(service.remove(bno)) {
+		rttr.addFlashAttribute("result", "success");
+		}
+		return "redirect:/board/list";
+	}
 	
 	@GetMapping("/register")
-	public void registerGET() {
-		log.info("registerGET...");
+	public void register(){
+		
 	}
 	
 	@PostMapping("/register")
 	public String register(BoardVO board,RedirectAttributes rttr) {
 		log.info("register:"+board);
-		
+		// 등록처리 후 , rttr객체로 result라는 변수로 리다이렉트 해서 일회성으로 bno 값을보내줌
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
 		return "redirect:/board/list";
 		}
-	
-//	@PostMapping("/modify")
-//	public String modify(BoardVO board,RedirectAttributes rttr) {
-//		int count = service.modify(board);
-//		if(count == 1) {
-//			rttr.addFlashAttribute("result","succes");
-//		}
-//		return "redirect:/board/list";
-//	}
-	
-	
-//	@PostMapping("/remove")
-//	public String remove(@RequestParam("bno")Long bno,RedirectAttributes rttr) {
-//		service.remove(bno);
-//		return "redirect:/board/list";
-//	}
 }

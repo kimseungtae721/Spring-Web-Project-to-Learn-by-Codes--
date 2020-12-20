@@ -6,7 +6,7 @@
 <%@include file="../includes/header.jsp" %>
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Board Read</h1>
+                    <h1 class="page-header">상세보기 페이지</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -15,7 +15,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-							Board Read
+							상세보기 페이지
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -32,24 +32,43 @@
 					
 					<div class="form-group">
 						<label>Content</label>
-					<textarea class="form-control col-sm-5" rows="5" name="content"><c:out value="${board.content}"/></textarea>
+					<textarea class="form-control col-sm-5" rows="5" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
 					</div>
 
 				
 					<div class="form-group">
 						<label>Writer</label>
-						 <input class="form-control" name="writer" value='<c:out value="${board.writer}"/>'>
+						 <input class="form-control" name="writer" readonly="readonly" value='<c:out value="${board.writer}"/>'>
 					</div>
-				<button type="submit" class="btn btn-default">Submit Button</button>
-				 <button type="reset" class="btn btn-default">Reset Button</button>
-						
+						<button data-oper='modify' class="btn btn-default" >수정</button>
+						<button data-oper='list' class="btn btn-info" >목록</button>
                         </div>
+                        
+                        <form id='operForm' action="/board/modify" method="get">
+                        <input type='hidden' id='bno' name='bno' value='<c:out value="${board.bno }"/>'>
+                        </form>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            </div>
-     
      <%@include file="../includes/footer.jsp" %>
+<script type="text/javascript">
+$(document).ready(function(){
+	var operForm = $("#operForm");
+
+	$("button[data-oper='modify']").on("click",function(e){
+	operForm.attr("action","/board/modify").submit();
+	});
+
+	$("button[data-oper='list']").on("click",function(e){
+	operForm.find("#bno").remove();
+	operForm.attr("action","/board/list")
+	operForm.sumbit();
+		});
+});
+</script>
+
+
+</script>

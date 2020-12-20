@@ -45,6 +45,6 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVO> getList() {
 		log.info("getlist.....");
 		return mapper.getList();
+		}
 	}
 
-}

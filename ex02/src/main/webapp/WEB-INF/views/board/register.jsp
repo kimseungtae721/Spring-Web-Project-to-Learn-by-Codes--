@@ -20,7 +20,6 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
 							<form action="/board/register" method="post">
-				
 					<div class="form-group">
 						<label>Title</label>
 						<input class="form-control" name="title">
@@ -39,7 +38,6 @@
 				<button type="submit" class="btn btn-default">Submit Button</button>
 				 <button type="reset" class="btn btn-default">Reset Button</button>
 				</form>
-						
                         </div>
                         <!-- /.panel-body -->
                     </div>

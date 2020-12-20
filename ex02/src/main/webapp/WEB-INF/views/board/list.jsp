@@ -30,18 +30,19 @@
                                         <th>Writer</th>
                                         <th>RegDate</th>
                                         <th>UpdateDate</th>
+                
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${list}" var="board">
+                                   <c:forEach items="${list}" var="board">
                                     <tr class="odd gradeX">
-                                        <td>${board.bno }</td>
-                                        <td><a href='/board/get?bno=<c:out value="${board.bno}"/>'>${board.title }</td>
-                                        <td>${board.writer }</td>
-                                        <td><fmt:formatDate value="${board.regdate }" pattern="yyyy-MM-dd"/></td>
-                                        <td><fmt:formatDate value="${board.updateDate }" pattern="yyyy-MM-dd"/></td>
+										<td><c:out value="${board.bno }" /></td>
+                                        <td><a href='/board/get?bno=<c:out value="${board.bno }"/>'> <c:out value="${board.title }" /></a></td>
+										<td><c:out value="${board.writer }" /></td>
+										<td><fmt:formatDate value="${board.regdate}" pattern="yyyy-MM-dd"/></td>
+										<td><fmt:formatDate value="${board.updateDate}" pattern="yyyy-MM-dd"/></td>
                                     </tr>
-                                   </c:forEach>
+                             </c:forEach>
                             </table>
                             <!-- /.table-responsive -->
                         </div>
@@ -51,8 +52,8 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            
-            <div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <!-- modal 추가  -->        
+   <div id="myModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -65,40 +66,38 @@
         <p>Modal body text goes here.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
 </div>
-            
+     <!-- modal 끝 -->       
 <script type="text/javascript">
 $(document).ready(function(){
 
 	var result = '<c:out value="${result}"/>';
 
-	checkModal(result);
+	checkModal(result);     //controller에서 받아온 bno값을 변경
 
-	//브라우저 주석창 데이터를 다지워줌
-	history.replaceState({},null,null);
-	
+	history.replaceState({},null,null);  //window.history 객체를 사용해 뒤로가기시 데이터 초기화 
+	//모달창 메서드
 	function checkModal(result){
 
-			if (result === '' || history.state) {
-						return;
-					}
-			if (result === 'success') {
-				$(".modal-body").html(
-						"정상적으로 처리되었습니다");
-				}else if (parseInt(result) > 0) {
-				$(".modal-body").html(
-						"게시글" + parseInt(result) + "번이 등록 되었습니다.");
-				}
-					$("#myModal").modal("show");
-				}
-			$("#regBtn").click(function() {
-				self.location = "/board/register";
-						});
-			});
+		if(result ==='' || history.state)	
+			return;
+		if(parseInt(result) > 0) 	{
+			$(".modal-body").html("게시글" + parseInt(result)+ "번이 등록 되었습니다");   
+		}else{
+			$(".modal-body").html("처리 완료");   
+			}
+
+		$("#myModal").modal("show");      
+		}
+	
+		$("#regBtn").on("click",function(){
+			self.location = "/board/register";
+		})
+});
 </script>
      <%@include file="../includes/footer.jsp" %>
