@@ -59,8 +59,66 @@
                 <!-- /.col-lg-12 -->
             </div>
      <%@include file="../includes/footer.jsp" %>
+
+<!-- 모듈패턴 연결 -->
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	console.log(replyService);
+
+});
+</script>
+
+<script>
+	console.log("=======")
+	console.log("등록js test")
+
+	var bnoValue = '<c:out value="${board.bno}"/>';
+	
+	//댓글등록
+	replyService.add({reply:"js test3",replyer:"tester3",bno:bnoValue},
+	function(result){
+		alert("result:" + result);
+	}
+);
+
+	//댓글목록
+	replyService.getList({bno:bnoValue, page:1}, function(list){
+
+		for(var i = 0, len = list.length||0; i< len; i++) {
+		console.log(list[i]);
+	}	
+});	
+
+	//댓글 삭제
+	replyService.remove(24, function(count){
+
+		console.log(count);
+
+		if(count === "success"){
+			alert("삭제완료~~!");
+		}
+	}, function(err){
+			alert("오류....");
+});
+
+	//댓글 수정
+	replyService.update({rno : 100, bno : bnoValue, reply : "수정~수~정수~정"},
+		function(result){
+		alert("수정 완료~");
+		});
+
+	//댓글 조회
+	replyService.get(20, function(data){
+		console.log(data + "됫나?");
+	});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
 	var operForm = $("#operForm");
 
 	$("button[data-oper='modify']").on("click",function(e){
@@ -77,5 +135,3 @@ $(document).ready(function(){
 });
 </script>
 
-
-</script>

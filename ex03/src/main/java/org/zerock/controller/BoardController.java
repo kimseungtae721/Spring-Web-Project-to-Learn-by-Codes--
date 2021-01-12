@@ -89,6 +89,6 @@ public class BoardController {
 		// 등록처리 후 , rttr객체로 result라는 변수로 리다이렉트 해서 일회성으로 bno 값을보내줌
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
-		return "redirect:/board/list";
+		return "board/list";
 		}
 }

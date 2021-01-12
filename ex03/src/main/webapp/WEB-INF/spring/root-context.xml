@@ -14,9 +14,9 @@
 		</property>
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl">
 		</property>
-		<property name="username" value="web">
+		<property name="username" value="book_ex">
 		</property>
-		<property name="password" value="1234">
+		<property name="password" value="book_ex">
 		</property>
 	</bean>
 	
