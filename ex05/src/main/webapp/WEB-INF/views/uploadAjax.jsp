@@ -69,8 +69,11 @@ $(document).ready(function(){
 		contentType: false,
 		data : formData,
 		type : "post",
+		dataType:"json",
 		success: function(result){
-			alert("uploaded");
+
+			console.log(result);
+		
 		} 
 	}); //$ajax
 
