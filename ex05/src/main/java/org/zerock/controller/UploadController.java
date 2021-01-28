@@ -1,12 +1,19 @@
 package org.zerock.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.zerock.domain.AttachFileDTO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -53,13 +60,23 @@ public class UploadController {
 		log.info("------uploadAjax------");
 
 	}
-	
+/*	
 	@PostMapping("/uploadAjaxAction")
 	public void uploadAjaxPost(MultipartFile[] uploadFile) {
 		log.info("----Ajax Post----");
 			
 		String uploadFolder = "C:\\upload";
 
+		// make folder -------
+		File uploadPath = new File(uploadFolder, getFolder());
+		log.info("upload path: " + uploadFolder);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
+		
+		// make folder end
+		
 		for(MultipartFile multipartFile : uploadFile) {
 		
 			log.info("--------------");
@@ -70,17 +87,58 @@ public class UploadController {
 			//IE 경로 파일명 \ 짤라내기
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			log.info("IE 에서 파일 경로 짜른이름:" + uploadFileName);
-	
-			File saveFile = new File(uploadFolder, uploadFileName);
+			
+			//uuid 랜덤으로 생성해서 파일이름앞에 선언
+			UUID uuid = UUID.randomUUID();
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
+
+			
+//			File saveFile = new File(uploadFolder, uploadFileName);
+			
 			
 			try {
+				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
+				
+				//이미지 타입 체크 (섬네일 이미지 생성)
+				if(checkImageType(saveFile)) {
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+					
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(),thumbnail,100,100);
+					
+					thumbnail.close();
+				}
 			}catch (Exception e) {
 				log.error(e.getMessage());
 			} //end catch
 		
 		}//end for
 	}
+*/
+
+	//년 월 일 폴더 생성
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = new Date();
+		
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
+	}
 	
+	//특정 파일이 이미지 타입인지 별도 검사
+	private boolean checkImageType(File file) {
+		
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			return contentType.startsWith("image");
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+		return false;
+		
+	}
 	
 }

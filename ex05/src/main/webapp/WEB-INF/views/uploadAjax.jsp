@@ -15,13 +15,33 @@
 <div class="uploadDiv">
 	<input type="file" name="uploadFile" multiple>
 	
-	<button id="uploadBtn">upload</button>
+	<button id="uploadBtn">upload</button> 
 </div>
 
 
 
 <script>
 $(document).ready(function(){
+	
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	var maxSize = 5242880; //5MB
+
+	function checkExtension(fileName, fileSize){
+
+		if(fileSize > maxSize){
+			alert("파일사이즈 초과");
+			return false;
+		}
+
+		if(regex.test(fileName)){
+			alert("해당 종류의 파일은 업로드 불가")
+			return false;
+		}
+
+		return true;
+	}
+
+	//uploadBtn 클릭시
 	$("#uploadBtn").on("click", function(e){
 
 	var formData = new FormData();
@@ -32,13 +52,18 @@ $(document).ready(function(){
 
 	console.log(files);
 
-	for(var i=0; i< files.length; i++){
+	for(var i = 0; i < files.length; i++){
 
+		//파일 이름 , 사이즈 검증
+		if(!checkExtension(files[i].name, files[i].size) ){
+				return false;
+		}
+		
 		formData.append("uploadFile", files[i]);
 		
 	}
 
-	$.ajax({
+	$.ajax({  
 		url: "/uploadAjaxAction",
 		processData: false,
 		contentType: false,
@@ -48,7 +73,9 @@ $(document).ready(function(){
 			alert("uploaded");
 		} 
 	}); //$ajax
-});
+
+	
+	});
 });
 </script>  
 </body>
