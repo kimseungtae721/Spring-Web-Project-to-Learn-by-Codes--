@@ -6,7 +6,31 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+.uploadResult {
+	width: 100%;
+	background-color: gray;
+}
+
+.uploadResult ul{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li{
+	list-style: none;
+	padding: 10px;
+}
+
+.uploadResult ul li img{
+	width: 200px;
+}
+</style>
 <body>
+
+
 <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
@@ -18,6 +42,11 @@
 	<button id="uploadBtn">upload</button> 
 </div>
 
+<div class="uploadResult">
+	<ul>
+	
+	</ul>
+</div>
 
 
 <script>
@@ -25,7 +54,8 @@ $(document).ready(function(){
 	
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 	var maxSize = 5242880; //5MB
-
+	
+	//파일 이름,사이즈 검증
 	function checkExtension(fileName, fileSize){
 
 		if(fileSize > maxSize){
@@ -37,10 +67,35 @@ $(document).ready(function(){
 			alert("해당 종류의 파일은 업로드 불가")
 			return false;
 		}
-
 		return true;
 	}
+	
+	//<ul> 태그내에 파일 이름 출력
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		var str = "";		
+		
+		$(uploadResultArr).each(function(i, obj) {
+			
+			if(!obj.image){
+				str += "<li><img src='/resources/img/attach.png'>" + obj.fileName + "</li>";
+			}else{
+				
+				var fileCallPath = encodeURIComponent( obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				
+				str += "<li><img src='/display?fileName="+fileCallPath+"'></li>";
+			}
 
+			
+		});
+		
+		uploadResult.append(str);
+	}
+	
+
+	var cloneObj = $(".uploadDiv").clone();
+	
 	//uploadBtn 클릭시
 	$("#uploadBtn").on("click", function(e){
 
@@ -72,8 +127,10 @@ $(document).ready(function(){
 		dataType:"json",
 		success: function(result){
 
-			console.log(result);
-		
+			showUploadedFile(result);
+			
+			$(".uploadDiv").html(cloneObj.html());
+			
 		} 
 	}); //$ajax
 
