@@ -36,7 +36,7 @@ public class ReplyController {
 		log.info("create ------" + vo);
 		int count = service.insert(vo);
 		log.info("count ------ " + count);
-		return count == 1 ?  new ResponseEntity<String>("success", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return count == 1 ?  new ResponseEntity<String>("success1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	//특정 게시물 조회
