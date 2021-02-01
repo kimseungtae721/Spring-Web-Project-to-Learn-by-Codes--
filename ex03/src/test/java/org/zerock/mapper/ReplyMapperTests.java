@@ -1,4 +1,4 @@
-package org.zerock.controller;
+package org.zerock.mapper;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -22,7 +22,7 @@ import lombok.extern.log4j.Log4j;
 public class ReplyMapperTests {
 	
 	//게시물 bno값
-	private Long[] bnoArr = {504L,505L,506L,507L,508L};
+	private Long[] bnoArr = {504L,505L,506L,507L,508L,49L};
 	
 	@Setter(onMethod_ = @Autowired)
 	private ReplyMapper mapper;
@@ -96,4 +96,15 @@ public class ReplyMapperTests {
 		
 		replies.forEach(reply -> log.info(reply));
 	}
+	
+	//댓글페이징
+	@Test
+	public void testList2() {
+		
+		Criteria cri = new Criteria(2, 10);
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, 49L);
+		
+		replies.forEach(reply -> log.info(reply));
+	}
+	
 }

@@ -71,6 +71,12 @@
 					</ul>
 					 <!-- end reply -->
              </div>   
+            	
+					<div class="panel-footer">
+					
+					</div>
+
+
             		
                  
                     <!-- /.panel -->
@@ -165,41 +171,6 @@ replyService.get(1, function(data) {
 -->
 
 <script type="text/javascript">
-console.log("-------");
-console.log("js test");
-
-var bnoValue = '<c:out value = "${board.bno}" />';
-
-
-
-//댓글 리스트 test
-replyService.getList({bno:bnoValue, page:1}, function(list){
-	
-	for (var i =0, len = list.length || 0; i < len; i++){
-		console.log(list[i]);
-		}
-	});
-//댓글 삭제 test
-replyService.remove(101, function(count) {
-	
-	console.log(count);
-	
-	if(count === "success1"){
-		alert("remove!");
-	}
-}, 	function(err){
-	alert("error.....");
-});
-
-
-//댓글 조회 tests
-replyService.get(1, function(data) {
-	console.log("댓글조회 -------" + data);
-})
-</script>
-
-
-<script type="text/javascript">
 $(document).ready(function(){
 	var bnoValue = '<c:out value="${board.bno}"/>';
 	var replyUL = $(".chat");
@@ -232,11 +203,21 @@ $(document).ready(function(){
 	//댓글 리스트
 	function showList(page){
 	
-	replyService.getList({bno:bnoValue,page: page || 1}, function(list) {
+	replyService.getList({bno:bnoValue,page: page || 1}, function(replyCnt,list) {
+		
+		console.log("replyCnt ----" + "replyCnt");
+		console.log("list:------ " + list);
+		console.log(list);
+		
+		if(page == -1){
+			pageNum = Math.ceil(replyCnt/10.0);
+			showList(pageNum);
+			return;
+		}
 		
 		var str = "";
 		if(list == null || list.length == 0){
-			replyUL.html("");	
+			return;
 		}
 		
 		for(var i = 0, len = list.length || 0 ; i < len; i++){
@@ -246,8 +227,55 @@ $(document).ready(function(){
 			str +="<p>" + list[i].reply + "</p></div></li>";
 		}
 		replyUL.html(str);
+		
+		showReplyPage(replyCnt);
 	});
 }// shoList end
+
+
+		var pageNum = 1;
+		var replyPageFooter = $(".panel-footer");
+		
+		//댓글 페이징처리
+		  function showReplyPage(replyCnt){
+		      
+		      var endNum = Math.ceil(pageNum / 10.0) * 10;  
+		      var startNum = endNum - 9; 
+		      
+		      var prev = startNum != 1;
+		      var next = false;
+		      
+		      if(endNum * 10 >= replyCnt){
+		        endNum = Math.ceil(replyCnt/10.0);
+		      }
+		      
+		      if(endNum * 10 < replyCnt){
+		        next = true;
+		      }
+		      
+		      var str = "<ul class='pagination pull-right'>";
+		      
+		      if(prev){
+		        str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+		      }
+		      
+		      for(var i = startNum ; i <= endNum; i++){
+		        
+		        var active = pageNum == i? "active":"";
+		        
+		        str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		      }
+		      
+		      if(next){
+		        str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+		      }
+		      
+		      str += "</ul></div>";
+		      
+		      console.log(str);
+		      
+		      replyPageFooter.html(str);
+		    }
 
 	modalRegisterBtn.on("click", function(e) {
 		
@@ -263,7 +291,8 @@ $(document).ready(function(){
 							modal.find("input").val("");
 							modal.modal("hide");
 				
-							showList(1); //댓글 생성후 댓글 리스트 재조회
+							//showList(1); //댓글 생성후 댓글 리스트 재조회
+							showList(-1);
 							
 		});
 	}); //registerBtn end
@@ -299,7 +328,7 @@ $(document).ready(function(){
      	        
      	    alert(result);
      	    modal.modal("hide");
-     	    showList(1);
+     	    showList(pageNum);
      	  });
      	});
 
@@ -312,7 +341,7 @@ $(document).ready(function(){
      	        
      	      alert(result);
      	      modal.modal("hide");
-     	      showList(1);
+     	      showList(pageNum);
      	  });
      	});
 
@@ -320,6 +349,22 @@ $(document).ready(function(){
      	$("#modalCloseBtn").on("click", function (e){
      		modal.modal('hide');
      	});
+		
+		
+		//댓글 페이징이동처리
+        replyPageFooter.on("click","li a", function(e){
+            e.preventDefault();
+            console.log("page click");
+            
+            var targetPageNum = $(this).attr("href");
+            
+            console.log("targetPageNum: " + targetPageNum);
+            
+            pageNum = targetPageNum;
+            
+            showList(pageNum);
+          });     
+		
 });
 </script>
 

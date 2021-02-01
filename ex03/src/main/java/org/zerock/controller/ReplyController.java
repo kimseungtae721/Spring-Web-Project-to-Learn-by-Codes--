@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 import org.zerock.service.ReplyService;
 
@@ -41,13 +42,13 @@ public class ReplyController {
 	
 	//특정 게시물 조회
 	@GetMapping(value = "/pages/{bno}/{page}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(@PathVariable Long bno,@PathVariable int page){
+	public ResponseEntity<ReplyPageDTO> getList(@PathVariable Long bno,@PathVariable int page){
 		
 		log.info("get List -------");
 		Criteria cri = new Criteria(page, 10);
 		log.info("get cri-------" + cri);
 		
-		return new ResponseEntity<List<ReplyVO>>(service.getListWithPaging(cri, bno),HttpStatus.OK);
+		return new ResponseEntity<ReplyPageDTO>(service.getListWithPaging(cri, bno),HttpStatus.OK);
 	}
 	
 	//댓글조회

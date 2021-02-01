@@ -27,7 +27,8 @@ var replyService = (function(){
 		 				// replies/pages/bno/page.json
 		$.getJSON("/replies/pages/"+ bno + "/" + page +".json",
 				function(data){
-				callback(data);
+//				callback(data); //댓글목록만 가져올경우
+				callback(data.replyCnt, data.list); //댓글 숫자와 목록
 		}).fail(function(xhr, status, err){
 			error();
 		});
