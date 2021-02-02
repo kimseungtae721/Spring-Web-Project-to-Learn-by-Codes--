@@ -76,4 +76,8 @@ references tbl_board(bno);
 commit
 	insert into tbl_attach (uuid, uploadpath, filename, filetype, bno)
 	values (124, 'zz', '파일네임', 'i', 5)
+
 select * from tbl_attach;
+
+    
+	select * from tbl_attach where uploadpath =to_char(sysdate -1,'yyyy\mm\dd')
