@@ -109,7 +109,6 @@
                     </div>
                     
                     <div class="row">
-  <div class="col-lg-12">
     <div class="panel panel-default">
 
       <div class="panel-heading">Files</div>
@@ -123,8 +122,6 @@
       </div>
       <!--  end panel-body -->
     </div>
-    <!--  end panel-body -->
-  </div>
   <!-- end panel -->
 </div>
 <!-- /.row -->
@@ -469,17 +466,10 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
-  
   (function(){
   
     var bno = '<c:out value="${board.bno}"/>';
     
-    /* $.getJSON("/board/getAttachList", {bno: bno}, function(arr){
-    
-      console.log(arr);
-      
-      
-    }); *///end getjson
     $.getJSON("/board/getAttachList", {bno: bno}, function(arr){
         
        console.log(arr);
