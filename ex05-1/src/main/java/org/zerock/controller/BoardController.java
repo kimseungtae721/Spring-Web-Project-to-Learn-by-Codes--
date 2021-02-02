@@ -1,6 +1,9 @@
 package org.zerock.controller;
 
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -71,18 +74,26 @@ public class BoardController {
 	}
 	
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") Long bno, Criteria cri, RedirectAttributes rttr) {
 		log.info("컨트롤러 remove:" + bno);
-		if(service.remove(bno)) {
-		rttr.addFlashAttribute("result", "success");
-		}
+		/* Criteria 클래스에 추가한 메서드로 인해 필요없어짐
 		rttr.addAttribute("pageNum",cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
 
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
+		*/
+		log.info("remove....." + bno);
 		
-		return "redirect:/board/list";
+		List<BoardAttachVO> attachList = service.getAttachList1(bno);
+		
+		if(service.remove(bno)) {
+			deleteFiles(attachList);
+			rttr.addFlashAttribute("result", "success");
+		}
+		
+			//list에 위에서 주석처리한 값들을 돌려보내줌
+		return "redirect:/board/list" + cri.getListLink();
 	}
 	
 	@GetMapping("/register")
@@ -115,5 +126,39 @@ public class BoardController {
 		log.info("컨트롤러 getAttachList" + bno);
 		
 		return new ResponseEntity<List<BoardAttachVO>>(service.getAttachList1(bno), HttpStatus.OK);
+	}
+	
+	//첨부파일 삭제 메서드
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		
+		log.info("delete attach files.........");
+		log.info(attachList);
+
+		
+		attachList.forEach(attach -> {
+			try {
+				// java.nio.file 패키지 사용
+				Path file = Paths.get("C:\\upload\\" + attach.getUploadPath() + "\\" 
+				+ attach.getUuid() +"_"+ attach.getFileName());
+			
+				Files.deleteIfExists(file);
+			
+				if(Files.probeContentType(file).startsWith("image")) {
+					
+				Path thumbNail = Paths.get("C:\\upload\\" + attach.getUploadPath() + "\\s_" 
+				+ attach.getUuid() + "_" + attach.getFileName());
+				
+				Files.delete(thumbNail);
+				}
+			}catch (Exception e) {
+				log.error("delete file error" + e.getMessage());
+			}
+			
+		});
+		
 	}
 }

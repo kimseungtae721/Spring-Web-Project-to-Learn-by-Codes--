@@ -53,10 +53,15 @@ public class BoardServiceImpl implements BoardService {
 		log.info("modify....." + board);
 		return mapper.update(board) == 1;
 	}
-
+	
+	//트랜잭션처리
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove.."+ bno);
+		
+		attachMapper.deleteAll(bno);
+		
 		return mapper.delete(bno) == 1;
 	}
 
