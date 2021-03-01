@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 스프링 시큐리티의 시작점 -->
+	<security:http>
+	
+		<security:form-login/>
+	
+	</security:http>
+
+	<!--  시큐리티 동작하기 위해 필요한 존재  -->
+	<security:authentication-manager>
+	
+	</security:authentication-manager>
+
+
+</beans>
