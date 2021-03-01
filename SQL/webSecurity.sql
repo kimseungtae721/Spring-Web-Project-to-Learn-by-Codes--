@@ -8,7 +8,7 @@ username varchar2(50) not null,
 authority varchar2(50) not null,
 CONSTRAINT fk_authorities_users foreign key(username) REFERENCES users(username));
 
--- uniqueÀÎµ¦½º »ı¼º (Áßº¹µÈ°ªÀÌ ÀÖÀ¸¸é »ı¼ºx ÀÌ¹ÌÀúÀåµÈ °ª µ¥ÀÌÅÍ Ãß°¡ x)
+-- uniqueì¸ë±ìŠ¤ ìƒì„± (ì¤‘ë³µëœê°’ì´ ìˆìœ¼ë©´ ìƒì„±x ì´ë¯¸ì €ì¥ëœ ê°’ ë°ì´í„° ì¶”ê°€ x)
 create UNIQUE index ix_auth_username on authorities(username,authority);
 
 insert into users(username,password) values('user00','pw00');
@@ -37,11 +37,24 @@ CONSTRAINT fk_member_auth FOREIGN key(userid) REFERENCES tbl_member(userid)
 );
 
 commit;
---·Î±×ÀÎ ÀÎÁõ
+--ë¡œê·¸ì¸ ì¸ì¦
 select userid, username, userpw password, enabled
 from tbl_member
 where userid = 'admin90';
---±ÇÇÑ
+--ê¶Œí•œ
 select userid username, auth authority
 from tbl_member_auth
 where userid = 'admin90';
+
+---------
+--ìë™ë¡œê·¸ì¸
+
+create table persistent_logins(
+username varchar2(64) not null,
+series varchar2(64) PRIMARY key,
+token varchar2(64) not null,
+last_used timestamp not null);
+
+COMMIT
+
+select * from persistent_logins 
