@@ -34,7 +34,10 @@
 		<!--  get방식으로 접근하는 uri 지정 -->		
 		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
 		<!-- 로그아웃 처리후 세션 무효화 -->
-		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="remember-me,JSESSION_ID"/>
+		<!-- DB를 이용한 자동로그인 -->
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+
 	</security:http>
 
 	<!--  시큐리티 동작하기 위해 필요한 존재 (인증과 권한)  -->
