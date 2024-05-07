@@ -33,7 +33,7 @@
 <dependency>
     <groupId>org.springframework.security</groupId>
     <artifactId>spring-security-core</artifactId>
-    <version>5.0.6.RELEASE</version>
+    <version>5.7.12</version>
 </dependency>
 
 <!-- JSP에서 시큐리티 관련 태그 라이브러리 활용할수 있도록 추가 -->
